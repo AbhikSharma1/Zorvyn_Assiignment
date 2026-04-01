@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { motion } from "framer-motion";
 import useStore from "../store/useStore";
 import { monthlyData, categoryData } from "../data/mockData";
 
@@ -41,7 +42,12 @@ export default function Insights() {
             {stats.savingsRate >= 20 ? "Great job! You're saving more than 20% of your income." : "Try to save at least 20% of your income each month."}
           </p>
           <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div className={`h-full rounded-full progress-fill ${stats.savingsRate >= 20 ? "bg-emerald-500" : "bg-red-500"}`} style={{ width: `${Math.min(stats.savingsRate, 100)}%` }} />
+            <motion.div
+              className={`h-full rounded-full ${stats.savingsRate >= 20 ? "bg-emerald-500" : "bg-red-500"}`}
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min(stats.savingsRate, 100)}%` }}
+              transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
+            />
           </div>
         </div>
 
@@ -54,7 +60,13 @@ export default function Insights() {
             {fmt(stats.topCategory.value)} spent — {Math.round((stats.topCategory.value / totalSpend) * 100)}% of total expenses.
           </p>
           <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div className="h-full rounded-full progress-fill" style={{ width: `${Math.round((stats.topCategory.value / totalSpend) * 100)}%`, background: stats.topCategory.color }} />
+            <motion.div
+              className="h-full rounded-full"
+              style={{ background: stats.topCategory.color }}
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.round((stats.topCategory.value / totalSpend) * 100)}%` }}
+              transition={{ duration: 0.9, ease: "easeOut", delay: 0.2 }}
+            />
           </div>
         </div>
 
@@ -125,7 +137,13 @@ export default function Insights() {
                   <td className="px-4 py-3 text-sm text-slate-400">{pct}%</td>
                   <td className="px-4 py-3 w-40">
                     <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full progress-fill" style={{ width: `${pct}%`, background: cat.color }} />
+                      <motion.div
+                        className="h-full rounded-full"
+                        style={{ background: cat.color }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${pct}%` }}
+                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                      />
                     </div>
                   </td>
                 </tr>

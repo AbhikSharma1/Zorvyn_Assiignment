@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import useStore from "../store/useStore";
 import TransactionModal from "../components/TransactionModal";
+import Toast from "../components/Toast";
 import { CATEGORIES } from "../data/mockData";
 import { Plus, Trash2, Pencil, ArrowUpDown, RotateCcw, Download } from "lucide-react";
 
@@ -9,8 +11,10 @@ const fmt = (n) =>
 
 export default function Transactions() {
   const { transactions, deleteTransaction, filters, setFilter, resetFilters, role } = useStore();
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal]   = useState(false);
   const [editTarget, setEditTarget] = useState(null);
+  const [toast, setToast]           = useState(null); // "add" | "edit" | "delete" | null
+  const [tbodyRef]                  = useAutoAnimate();
   const isAdmin = role === "admin";
 
   const filtered = useMemo(() => {
@@ -36,7 +40,13 @@ export default function Transactions() {
 
   const sortIcon = (col) => filters.sortBy === col ? (filters.sortDir === "asc" ? " ↑" : " ↓") : "";
 
-  const handleClose = () => { setShowModal(false); setEditTarget(null); };
+  const handleClose   = () => { setShowModal(false); setEditTarget(null); };
+  const handleSuccess = (type) => setToast(type);
+
+  const handleDelete = (id) => {
+    deleteTransaction(id);
+    setToast("delete");
+  };
 
   const exportCSV = () => {
     const header = "Date,Description,Category,Type,Amount";
@@ -120,7 +130,8 @@ export default function Transactions() {
                 {isAdmin && <th className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400">Actions</th>}
               </tr>
             </thead>
-            <tbody>
+            {/* auto-animate on tbody so rows animate when filtered/sorted */}
+            <tbody ref={tbodyRef}>
               {filtered.map((tx) => (
                 <tr key={tx.id} className="border-b border-slate-100 dark:border-slate-700/50 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
                   <td className="px-4 py-3 text-sm text-slate-400">{tx.date}</td>
@@ -136,12 +147,14 @@ export default function Transactions() {
                         <button
                           onClick={() => { setEditTarget(tx); setShowModal(true); }}
                           className="w-7 h-7 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-indigo-500 hover:scale-110 transition-all"
+                          title="Edit"
                         >
                           <Pencil size={12} />
                         </button>
                         <button
-                          onClick={() => deleteTransaction(tx.id)}
+                          onClick={() => handleDelete(tx.id)}
                           className="w-7 h-7 rounded-lg border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-400 hover:text-red-500 hover:scale-110 transition-all"
+                          title="Delete"
                         >
                           <Trash2 size={12} />
                         </button>
@@ -155,7 +168,17 @@ export default function Transactions() {
         )}
       </div>
 
-      {showModal && <TransactionModal existing={editTarget} onClose={handleClose} />}
+      {/* Transaction form modal */}
+      {showModal && (
+        <TransactionModal
+          existing={editTarget}
+          onClose={handleClose}
+          onSuccess={handleSuccess}
+        />
+      )}
+
+      {/* Admin action toast */}
+      {toast && <Toast type={toast} onClose={() => setToast(null)} />}
     </>
   );
 }

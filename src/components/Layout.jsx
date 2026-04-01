@@ -1,6 +1,7 @@
 import useStore from "../store/useStore";
 import { LayoutDashboard, ArrowLeftRight, Lightbulb, Moon, Sun, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
   { id: "dashboard",    label: "Dashboard",    icon: LayoutDashboard },
@@ -126,10 +127,19 @@ export default function Layout({ children }) {
             </div>
           </header>
 
-          {/* Page */}
-          <main className="flex-1 p-4 md:p-7 animate-fade-in">
-            {children}
-          </main>
+          {/* Page — fade + slide up on every navigation */}
+          <AnimatePresence mode="wait">
+            <motion.main
+              key={activePage}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0  }}
+              exit={{    opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className="flex-1 p-4 md:p-7"
+            >
+              {children}
+            </motion.main>
+          </AnimatePresence>
         </div>
     </div>
   );
