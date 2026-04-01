@@ -19,16 +19,25 @@ const useStore = create((set, get) => ({
     set({ role });
   },
 
-  // Dark mode — class is applied to <html> so Tailwind dark: variants work
+  // Dark mode — class lives on <html> so all Tailwind dark: variants work
   darkMode: (() => {
     const saved = loadFromStorage("darkMode", false);
-    if (saved) document.documentElement.classList.add("dark");
+    // Sync html class with persisted value on startup
+    if (saved) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
     return saved;
   })(),
   toggleDarkMode: () => {
     const next = !get().darkMode;
     localStorage.setItem("darkMode", JSON.stringify(next));
-    document.documentElement.classList.toggle("dark", next);
+    if (next) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
     set({ darkMode: next });
   },
 
