@@ -55,7 +55,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](https://fintrack-financer.netlify.app/)
+Open [https://fintrack-financer.netlify.app/](https://fintrack-financer.netlify.app/)
 
 ## Project Structure
 
