@@ -4,7 +4,7 @@ A clean, interactive finance dashboard built with React + Vite.
 
 ## Tech Stack
 
-- **React 18** + **Vite** — fast dev server and build
+- **React 18** + **Vite** — for fast dev server and build
 - **Recharts** — Area, Bar, and Pie charts
 - **Zustand** — lightweight global state management
 - **Lucide React** — icon library
