@@ -40,14 +40,23 @@ export default function Layout({ children }) {
           ${sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"}
           md:translate-x-0
         `}>
-          {/* Logo */}
-          <div className="flex items-center gap-3 px-2 pb-6 mb-5 border-b border-slate-200 dark:border-slate-700">
-            <div className="w-9 h-9 bg-indigo-500 rounded-xl flex items-center justify-center text-white text-lg">
-              💰
+          {/* Logo + close button */}
+          <div className="flex items-center justify-between px-2 pb-6 mb-5 border-b border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 bg-indigo-500 rounded-xl flex items-center justify-center text-white text-lg">
+                💰
+              </div>
+              <span className="text-[17px] font-bold">
+                Fin<span className="text-indigo-500">Track</span>
+              </span>
             </div>
-            <span className="text-[17px] font-bold">
-              Fin<span className="text-indigo-500">Track</span>
-            </span>
+            {/* X button — only visible on mobile */}
+            <button
+              className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700 transition-all"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <X size={18} />
+            </button>
           </div>
 
           {/* Nav */}
