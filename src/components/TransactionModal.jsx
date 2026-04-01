@@ -62,7 +62,7 @@ export default function TransactionModal({ existing, onClose }) {
             />
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div className="form-group">
               <label>Amount ($)</label>
               <input
@@ -88,7 +88,7 @@ export default function TransactionModal({ existing, onClose }) {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="form-row" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div className="form-group">
               <label>Type</label>
               <select className="form-select" name="type" value={form.type} onChange={handleChange}>

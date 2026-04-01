@@ -84,6 +84,6 @@ src/
 
 ## Notes
 
-- No backend required — all data is static/mock
+- No backend is there — all data is static/mock
 - Role switching is frontend-only for demonstration purposes
 - Data added by admin is persisted via localStorage across sessions
