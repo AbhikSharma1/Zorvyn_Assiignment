@@ -36,7 +36,9 @@ export default function Dashboard() {
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <BalanceTrendChart />
+        <div className="col-span-1 md:col-span-2">
+          <BalanceTrendChart />
+        </div>
         <SpendingPieChart />
         <MonthlyBarChart />
       </div>
