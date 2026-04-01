@@ -21,8 +21,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className={darkMode ? "dark" : ""}>
-      <div className="flex min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-200">
+    <div className="flex min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-200">
 
         {/* Mobile overlay */}
         {sidebarOpen && (
@@ -123,7 +122,6 @@ export default function Layout({ children }) {
             {children}
           </main>
         </div>
-      </div>
     </div>
   );
 }

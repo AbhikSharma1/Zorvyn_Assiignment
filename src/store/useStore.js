@@ -19,11 +19,16 @@ const useStore = create((set, get) => ({
     set({ role });
   },
 
-  // Dark mode
-  darkMode: loadFromStorage("darkMode", false),
+  // Dark mode — class is applied to <html> so Tailwind dark: variants work
+  darkMode: (() => {
+    const saved = loadFromStorage("darkMode", false);
+    if (saved) document.documentElement.classList.add("dark");
+    return saved;
+  })(),
   toggleDarkMode: () => {
     const next = !get().darkMode;
     localStorage.setItem("darkMode", JSON.stringify(next));
+    document.documentElement.classList.toggle("dark", next);
     set({ darkMode: next });
   },
 
