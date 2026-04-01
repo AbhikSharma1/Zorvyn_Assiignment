@@ -1,9 +1,9 @@
+import { useMemo } from "react";
 import useStore from "../store/useStore";
 import SummaryCard from "../components/SummaryCard";
 import BalanceTrendChart from "../components/charts/BalanceTrendChart";
 import SpendingPieChart from "../components/charts/SpendingPieChart";
 import MonthlyBarChart from "../components/charts/MonthlyBarChart";
-import { useMemo } from "react";
 
 const fmt = (n) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n);
@@ -19,53 +19,23 @@ export default function Dashboard() {
     return { totalIncome, totalExpenses, balance, savingsRate };
   }, [transactions]);
 
-  // Recent 5 transactions
   const recent = useMemo(() =>
-    [...transactions]
-      .sort((a, b) => new Date(b.date) - new Date(a.date))
-      .slice(0, 5),
+    [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5),
     [transactions]
   );
 
   return (
     <>
       {/* Summary Cards */}
-      <div className="cards-grid">
-        <SummaryCard
-          label="Total Balance"
-          value={fmt(balance)}
-          icon="💳"
-          iconBg="rgba(99,102,241,.15)"
-          sub={`${savingsRate}% savings rate`}
-          subType={savingsRate >= 20 ? "up" : "down"}
-        />
-        <SummaryCard
-          label="Total Income"
-          value={fmt(totalIncome)}
-          icon="📈"
-          iconBg="rgba(34,197,94,.15)"
-          sub="↑ All time"
-          subType="up"
-        />
-        <SummaryCard
-          label="Total Expenses"
-          value={fmt(totalExpenses)}
-          icon="📉"
-          iconBg="rgba(239,68,68,.15)"
-          sub="↓ All time"
-          subType="down"
-        />
-        <SummaryCard
-          label="Transactions"
-          value={transactions.length}
-          icon="🔄"
-          iconBg="rgba(245,158,11,.15)"
-          sub="Total recorded"
-        />
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <SummaryCard label="Total Balance"  value={fmt(balance)}       icon="💳" iconBg="rgba(99,102,241,.15)"  sub={`${savingsRate}% savings rate`} subType={savingsRate >= 20 ? "up" : "down"} />
+        <SummaryCard label="Total Income"   value={fmt(totalIncome)}   icon="📈" iconBg="rgba(34,197,94,.15)"   sub="↑ All time" subType="up" />
+        <SummaryCard label="Total Expenses" value={fmt(totalExpenses)} icon="📉" iconBg="rgba(239,68,68,.15)"   sub="↓ All time" subType="down" />
+        <SummaryCard label="Transactions"   value={transactions.length} icon="🔄" iconBg="rgba(245,158,11,.15)" sub="Total recorded" />
       </div>
 
       {/* Charts */}
-      <div className="charts-grid">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <BalanceTrendChart />
         <SpendingPieChart />
         <MonthlyBarChart />
@@ -73,34 +43,30 @@ export default function Dashboard() {
 
       {/* Recent Transactions */}
       <div>
-        <div className="section-header">
-          <h2 className="section-title">Recent Transactions</h2>
-        </div>
-        <div className="table-wrapper">
+        <h2 className="text-lg font-bold mb-4">Recent Transactions</h2>
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm overflow-x-auto">
           {recent.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-icon">📭</div>
-              <p>No transactions yet.</p>
+            <div className="text-center py-12 text-slate-400">
+              <div className="text-4xl mb-3">📭</div>
+              <p className="text-sm">No transactions yet.</p>
             </div>
           ) : (
-            <table>
+            <table className="w-full min-w-[520px]">
               <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th>Type</th>
-                  <th>Amount</th>
+                <tr className="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/40">
+                  {["Date", "Description", "Category", "Type", "Amount"].map((h) => (
+                    <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-400">{h}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {recent.map((tx) => (
-                  <tr key={tx.id}>
-                    <td style={{ color: "var(--text2)" }}>{tx.date}</td>
-                    <td>{tx.description}</td>
-                    <td><span className="category-chip">{tx.category}</span></td>
-                    <td><span className={`type-badge ${tx.type}`}>{tx.type}</span></td>
-                    <td className={`amount-${tx.type}`}>
+                  <tr key={tx.id} className="border-b border-slate-100 dark:border-slate-700/50 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/30 transition-colors">
+                    <td className="px-4 py-3 text-sm text-slate-400">{tx.date}</td>
+                    <td className="px-4 py-3 text-sm">{tx.description}</td>
+                    <td className="px-4 py-3"><span className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">{tx.category}</span></td>
+                    <td className="px-4 py-3"><span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${tx.type === "income" ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-red-50 dark:bg-red-500/10 text-red-500"}`}>{tx.type}</span></td>
+                    <td className={`px-4 py-3 text-sm font-semibold ${tx.type === "income" ? "text-emerald-500" : "text-red-500"}`}>
                       {tx.type === "income" ? "+" : "-"}{fmt(tx.amount)}
                     </td>
                   </tr>

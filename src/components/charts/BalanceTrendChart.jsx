@@ -1,21 +1,12 @@
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
-} from "recharts";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { monthlyData } from "../../data/mockData";
 import useStore from "../../store/useStore";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
-    <div style={{
-      background: "var(--surface)",
-      border: "1px solid var(--border)",
-      borderRadius: 10,
-      padding: "10px 14px",
-      fontSize: 13,
-      boxShadow: "var(--shadow)",
-    }}>
-      <p style={{ fontWeight: 700, marginBottom: 6 }}>{label}</p>
+    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-sm shadow-lg">
+      <p className="font-bold mb-1.5 text-slate-800 dark:text-slate-100">{label}</p>
       {payload.map((p) => (
         <p key={p.name} style={{ color: p.color }}>
           {p.name}: <strong>${p.value.toLocaleString()}</strong>
@@ -30,8 +21,8 @@ export default function BalanceTrendChart() {
   const axisColor = darkMode ? "#94a3b8" : "#94a3b8";
 
   return (
-    <div className="chart-card full">
-      <p className="chart-title">Income vs Expenses — 2025</p>
+    <div className="col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-5 shadow-sm">
+      <p className="text-sm font-semibold mb-4 text-slate-800 dark:text-slate-100">Income vs Expenses — 2025</p>
       <ResponsiveContainer width="100%" height={260}>
         <AreaChart data={monthlyData} margin={{ top: 5, right: 10, left: 0, bottom: 0 }}>
           <defs>
@@ -44,7 +35,7 @@ export default function BalanceTrendChart() {
               <stop offset="95%" stopColor="#ef4444" stopOpacity={0} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+          <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#334155" : "#e2e8f0"} />
           <XAxis dataKey="month" tick={{ fill: axisColor, fontSize: 12 }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fill: axisColor, fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => `$${v / 1000}k`} />
           <Tooltip content={<CustomTooltip />} />
